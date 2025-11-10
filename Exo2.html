@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>React – useEffect & useState</title>
+
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-900 text-white min-h-screen flex flex-col items-center justify-center p-4">
+  <h1 class="text-3xl font-bold mb-6">Reducer compteur</h1>
+  <div id="root" class="w-full max-w-xl"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useReducer } = React;
+
+function reducer(state, action) {
+  // Le reducer reçoit l'état actuel + une action
+  switch (action.type) {
+    case 'INCREMENT':
+      // Toujours retourner un NOUVEL objet
+      return { count: state.count + 1 };
+    case 'DECREMENT':
+      return { count: state.count - 1 };
+    case 'RESET':
+      return { count: 0 };
+    default:
+      return state;
+  }
+}
+
+function CounterReducer() {
+  // useReducer(reducerFunction, initialState)
+  // dispatch = fonction pour envoyer des actions au reducer
+  const [state, dispatch] = useReducer(reducer, { count: 0 });
+
+  return (
+    <div className="p-4 bg-slate-800 rounded-lg text-white">
+      {/* Affichage de l'état géré par le reducer */}
+      <h2 className="text-xl mb-4">Compteur: {state.count}</h2>
+      
+      {/* Chaque bouton envoie une ACTION au reducer */}
+      <button 
+        onClick={() => dispatch({ type: 'INCREMENT' })}
+        className="bg-green-600 px-4 py-2 rounded mr-2"
+      >
+        +1
+      </button>
+      <button 
+        onClick={() => dispatch({ type: 'DECREMENT' })}
+        className="bg-red-600 px-4 py-2 rounded mr-2"
+      >
+        -1
+      </button>
+      <button 
+        onClick={() => dispatch({ type: 'RESET' })}
+        className="bg-gray-600 px-4 py-2 rounded"
+      >
+        Reset
+      </button>
+    </div>
+  );
+}
+
+function App() {
+  return <CounterReducer />;
+}
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
